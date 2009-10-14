@@ -18,7 +18,7 @@ module Rack
     #
     # Note that memcache does drop data before it may be listed to expire. For
     # a full description of behaviour, please see memcache's documentation.
-
+    
     class Memcache < Abstract::ID
       attr_reader :mutex, :pool
       DEFAULT_OPTIONS = Abstract::ID::DEFAULT_OPTIONS.merge \
@@ -27,11 +27,12 @@ module Rack
 
       def initialize(app, options={})
         super
-
+      
         @mutex = Mutex.new
         @pool = MemCache.
           new @default_options[:memcache_server], @default_options
-        raise 'No memcache servers' unless @pool.servers.any?{|s|s.alive?}
+        raise 'No memcache servers' unless @pool.servers.any?{ |s|s.alive? }
+        @pool.reset
       end
 
       def generate_sid

@@ -44,6 +44,14 @@ begin
         end.should.raise ArgumentError
       end
     end
+   
+    specify "disconnect from memcache after verifying servers exist" do 
+      session = Rack::Session::Memcache.new(incrementor)
+
+      session.instance_variable_get( :'@pool').servers.each do |server|
+        server.instance_variable_get( :'@status').should.equal 'NOT CONNECTED'
+      end
+    end
 
     specify "creates a new cookie" do
       pool = Rack::Session::Memcache.new(incrementor)
